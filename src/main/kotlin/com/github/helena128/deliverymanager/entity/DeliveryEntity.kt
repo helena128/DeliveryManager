@@ -1,12 +1,10 @@
-package com.github.helena128.deliverymanager.model
+package com.github.helena128.deliverymanager.entity
 
-import com.expediagroup.graphql.generator.annotations.GraphQLDescription
-import com.expediagroup.graphql.generator.scalars.ID
+import com.github.helena128.deliverymanager.model.DeliveryStatus
 import java.time.OffsetDateTime
 
-@GraphQLDescription("Captures main information about delivery")
-data class Delivery(
-    val deliveryId: ID,
+data class DeliveryEntity (
+    val deliveryId: String,
     val product: String,
     val supplier: String,
     val quantity: Long = 0,

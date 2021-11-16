@@ -1,10 +1,10 @@
 package com.github.helena128.deliverymanager.repository
 
-import com.github.helena128.deliverymanager.model.Delivery
+import com.github.helena128.deliverymanager.entity.DeliveryEntity
 
 interface DeliveryRepository {
 
-    fun findReceivedDeliveries(): List<Delivery>
+    fun findReceivedDeliveries(): List<DeliveryEntity>
 
-    fun findPendingDeliveries(): List<Delivery>
+    fun findPendingDeliveries(): List<DeliveryEntity>
 }

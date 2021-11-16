@@ -6,9 +6,9 @@ import com.github.helena128.deliverymanager.repository.DeliveryRepository
 
 class DeliveryRepositoryMockImpl : DeliveryRepository {
 
-    override fun findReceivedDeliveries(): List<Delivery> =
+    override fun findReceivedDeliveries() =
         DataHelper.findDeliveriesByStatus(DeliveryStatus.RECEIVED)
 
-    override fun findPendingDeliveries(): List<Delivery> =
+    override fun findPendingDeliveries() =
         DataHelper.findDeliveriesByStatus(DeliveryStatus.PENDING)
 }

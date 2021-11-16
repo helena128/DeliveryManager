@@ -48,7 +48,7 @@ class DeliveryQueryTest(@Autowired private val testClient: WebTestClient) {
             .expectBody()
             .jsonPath("$.data").exists()
             .jsonPath("$.data.getDeliveries").exists()
-            .jsonPath("$.data.getDeliveries.[0].deliveryId").isEqualTo(expectedData.get(0).deliveryId.value)
+            .jsonPath("$.data.getDeliveries.[0].deliveryId").isEqualTo(expectedData.get(0).deliveryId)
             .jsonPath("$.data.getDeliveries.[0].product").isEqualTo(expectedData.get(0).product)
             .jsonPath("$.data.getDeliveries.[0].deliveryStatus").doesNotExist()
     }
@@ -75,10 +75,10 @@ class DeliveryQueryTest(@Autowired private val testClient: WebTestClient) {
             .expectBody()
             .jsonPath("$.data").exists()
             .jsonPath("$.data.getDeliveries").exists()
-            .jsonPath("$.data.getDeliveries.[0].deliveryId").isEqualTo(expectedData.get(0).deliveryId.value)
+            .jsonPath("$.data.getDeliveries.[0].deliveryId").isEqualTo(expectedData.get(0).deliveryId)
             .jsonPath("$.data.getDeliveries.[0].product").isEqualTo(expectedData.get(0).product)
             .jsonPath("$.data.getDeliveries.[0].deliveryStatus").isEqualTo(DeliveryStatus.RECEIVED.name)
-            .jsonPath("$.data.getDeliveries.[1].deliveryId").isEqualTo(expectedData.get(1).deliveryId.value)
+            .jsonPath("$.data.getDeliveries.[1].deliveryId").isEqualTo(expectedData.get(1).deliveryId)
             .jsonPath("$.data.getDeliveries.[1].product").isEqualTo(expectedData.get(1).product)
     }
 }
