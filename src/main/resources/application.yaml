@@ -1,0 +1,6 @@
+spring.application.name: delivery-manager
+
+graphql:
+  packages:
+    - "com.github.helena128" # TODO
+    #- "com.github.helena128.deliverymanager.model" # TODO
