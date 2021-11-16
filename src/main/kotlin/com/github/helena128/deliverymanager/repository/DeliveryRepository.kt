@@ -1,7 +1,10 @@
 package com.github.helena128.deliverymanager.repository
 
-import org.springframework.stereotype.Repository
+import com.github.helena128.deliverymanager.model.Delivery
 
-@Repository
-class DeliveryRepository {
+interface DeliveryRepository {
+
+    fun findReceivedDeliveries(): List<Delivery>
+
+    fun findPendingDeliveries(): List<Delivery>
 }
