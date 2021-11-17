@@ -1,0 +1,6 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:example@localhost:57023,localhost:57024
+      database: delivery_test
+      authentication-database: admin

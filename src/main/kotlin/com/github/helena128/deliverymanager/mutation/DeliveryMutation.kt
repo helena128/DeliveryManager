@@ -4,11 +4,14 @@ import com.expediagroup.graphql.server.operations.Mutation
 import com.github.helena128.deliverymanager.model.Delivery
 import com.github.helena128.deliverymanager.model.DeliveryStatus
 import com.github.helena128.deliverymanager.service.DeliveryService
+import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.stereotype.Component
 
 @Component
 class DeliveryMutation(val deliveryService: DeliveryService) : Mutation {
 
-    fun markDeliveryReceived(id: String): Delivery = deliveryService.updateDeliveryStatus(id, DeliveryStatus.RECEIVED)
+    suspend fun markDeliveryReceived(id: String): Delivery {
+        return deliveryService.updateDeliveryStatus(id, DeliveryStatus.RECEIVED).awaitSingle()
+    }
 
 }

@@ -5,26 +5,33 @@ import com.github.helena128.deliverymanager.constants.GRAPHQL_MEDIA_TYPE
 import com.github.helena128.deliverymanager.model.DeliveryStatus
 import com.github.helena128.deliverymanager.repository.DeliveryRepository
 import com.github.helena128.deliverymanager.util.DataHelper
-import com.github.helena128.deliverymanager.util.DeliveryRepositoryMockImpl
+import org.hamcrest.collection.IsIn.`in`
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import reactor.test.StepVerifier
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureWebTestClient
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DeliveryQueryTest(@Autowired private val testClient: WebTestClient) {
+class DeliveryQueryTest(
+    @Autowired private val testClient: WebTestClient,
+    @Autowired private val repository: DeliveryRepository
+) {
 
-    @TestConfiguration
-    class DeliveryQueryTest {
-        @Bean
-        fun deliveryRepository(): DeliveryRepository = DeliveryRepositoryMockImpl()
+    @BeforeEach
+    fun setup() {
+        StepVerifier.create(repository.saveAll(DataHelper.deliveryList))
+            .expectNextCount(3)
+            .verifyComplete()
     }
 
     @Test
@@ -76,10 +83,16 @@ class DeliveryQueryTest(@Autowired private val testClient: WebTestClient) {
             .expectBody()
             .jsonPath("$.data").exists()
             .jsonPath("$.data.getDeliveries").exists()
-            .jsonPath("$.data.getDeliveries.[0].deliveryId").isEqualTo(expectedData.get(0).deliveryId)
-            .jsonPath("$.data.getDeliveries.[0].product").isEqualTo(expectedData.get(0).product)
+            .jsonPath("$.data.getDeliveries.[0].deliveryId").value(`in`(expectedData.map { it.deliveryId }))
+            .jsonPath("$.data.getDeliveries.[0].product").value(`in`(expectedData.map { it.product }))
             .jsonPath("$.data.getDeliveries.[0].deliveryStatus").isEqualTo(DeliveryStatus.RECEIVED.name)
-            .jsonPath("$.data.getDeliveries.[1].deliveryId").isEqualTo(expectedData.get(1).deliveryId)
-            .jsonPath("$.data.getDeliveries.[1].product").isEqualTo(expectedData.get(1).product)
+            .jsonPath("$.data.getDeliveries.[1].deliveryId").value(`in`(expectedData.map { it.deliveryId }))
+            .jsonPath("$.data.getDeliveries.[1].product").value(`in`(expectedData.map { it.product }))
+    }
+
+    @AfterEach
+    fun tearDown() {
+        StepVerifier.create(repository.deleteAll())
+            .verifyComplete()
     }
 }

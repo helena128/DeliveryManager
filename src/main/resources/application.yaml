@@ -3,3 +3,10 @@ spring.application.name: delivery-manager
 graphql:
   packages:
     - "com.github.helena128.deliverymanager.model"
+
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URl}
+      database: ${MONGODB_DATABASE}
+      authentication-database: ${MONGODB_USER}

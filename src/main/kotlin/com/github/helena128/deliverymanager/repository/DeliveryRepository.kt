@@ -2,12 +2,15 @@ package com.github.helena128.deliverymanager.repository
 
 import com.github.helena128.deliverymanager.entity.DeliveryEntity
 import com.github.helena128.deliverymanager.model.DeliveryStatus
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
-interface DeliveryRepository {
+interface DeliveryRepository : ReactiveCrudRepository<DeliveryEntity, String> {
 
-    fun findReceivedDeliveries(): List<DeliveryEntity>
+    fun findAllByDeliveryStatus(status: DeliveryStatus): Flux<DeliveryEntity>
 
-    fun findPendingDeliveries(): List<DeliveryEntity>
+    fun findAllByDeliveryStatusNot(status: DeliveryStatus): Flux<DeliveryEntity>
 
-    fun updateDeliveryStatus(id: String, newStatus: DeliveryStatus): DeliveryEntity?
+    fun findByDeliveryId(deliveryId: String): Mono<DeliveryEntity>
 }
