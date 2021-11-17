@@ -1,13 +1,11 @@
 package com.github.helena128.deliverymanager.service
 
-import com.github.helena128.deliverymanager.entity.DeliveryEntity
 import com.github.helena128.deliverymanager.model.DeliveryStatus
 import com.github.helena128.deliverymanager.repository.DeliveryRepository
 import com.github.helena128.deliverymanager.util.DataHelper
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.times
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks

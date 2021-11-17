@@ -1,8 +1,6 @@
 package com.github.helena128.deliverymanager.repository
 
-import com.expediagroup.graphql.generator.scalars.ID
 import com.github.helena128.deliverymanager.entity.DeliveryEntity
-import com.github.helena128.deliverymanager.model.Delivery
 import com.github.helena128.deliverymanager.model.DeliveryStatus
 import org.springframework.stereotype.Repository
 import java.time.OffsetDateTime
@@ -20,4 +18,10 @@ class DeliveryRepositoryImpl : DeliveryRepository {
     override fun findReceivedDeliveries(): List<DeliveryEntity> = deliveryList.filter { DeliveryStatus.RECEIVED.equals(it.deliveryStatus) }
 
     override fun findPendingDeliveries(): List<DeliveryEntity> = deliveryList.filter { !DeliveryStatus.RECEIVED.equals(it.deliveryStatus) }
+
+    override fun updateDeliveryStatus(id: String, newStatus: DeliveryStatus): DeliveryEntity? {
+        val deliveryEntity = deliveryList.find { id.equals(it.deliveryId) }
+        deliveryEntity?.deliveryStatus = DeliveryStatus.RECEIVED
+        return deliveryEntity
+    }
 }

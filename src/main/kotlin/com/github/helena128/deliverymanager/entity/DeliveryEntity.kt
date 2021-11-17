@@ -10,6 +10,6 @@ data class DeliveryEntity (
     val quantity: Long = 0,
     val expectedDate: OffsetDateTime,
     val expectedWarehouse: String,
-    val deliveryStatus: DeliveryStatus = DeliveryStatus.PENDING,
+    var deliveryStatus: DeliveryStatus = DeliveryStatus.PENDING, // TODO: make val!
     val receivedDate: OffsetDateTime? = null
 )

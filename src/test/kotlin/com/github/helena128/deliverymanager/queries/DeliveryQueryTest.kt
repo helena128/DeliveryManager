@@ -29,8 +29,9 @@ class DeliveryQueryTest(@Autowired private val testClient: WebTestClient) {
 
     @Test
     fun `Test getting pending items`() {
-        val query = """
-              getDeliveries (received: false) {
+        val query = "getDeliveries"
+        val bodyValue = """
+              $query (received: false) {
                 deliveryId
                 product
               }
@@ -42,15 +43,15 @@ class DeliveryQueryTest(@Autowired private val testClient: WebTestClient) {
             .uri(GRAPHQL_ENDPOINT)
             .accept(APPLICATION_JSON)
             .contentType(GRAPHQL_MEDIA_TYPE)
-            .bodyValue("query { $query }")
+            .bodyValue("query { $bodyValue }")
             .exchange()
             .expectStatus().is2xxSuccessful()
             .expectBody()
             .jsonPath("$.data").exists()
-            .jsonPath("$.data.getDeliveries").exists()
-            .jsonPath("$.data.getDeliveries.[0].deliveryId").isEqualTo(expectedData.get(0).deliveryId)
-            .jsonPath("$.data.getDeliveries.[0].product").isEqualTo(expectedData.get(0).product)
-            .jsonPath("$.data.getDeliveries.[0].deliveryStatus").doesNotExist()
+            .jsonPath("$.data.$query").exists()
+            .jsonPath("$.data.$query.[0].deliveryId").isEqualTo(expectedData.get(0).deliveryId)
+            .jsonPath("$.data.$query.[0].product").isEqualTo(expectedData.get(0).product)
+            .jsonPath("$.data.$query.[0].deliveryStatus").doesNotExist()
     }
 
     @Test
