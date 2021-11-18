@@ -1,20 +1,17 @@
 package com.github.helena128.deliverymanager.service
 
 import com.github.helena128.deliverymanager.model.DeliveryStatus
-import com.github.helena128.deliverymanager.repository.DeliveryRepository
+import com.github.helena128.deliverymanager.repository.DeliveryMongoDbRepository
 import com.github.helena128.deliverymanager.util.DataHelper
-import com.github.helena128.deliverymanager.util.DateMapper
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.times
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.test.util.ReflectionTestUtils
 import org.springframework.transaction.reactive.TransactionalOperator
 import reactor.core.publisher.Flux
 import reactor.test.StepVerifier
@@ -23,7 +20,7 @@ import reactor.test.StepVerifier
 class DeliveryServiceImplTest { // TODO: add test for mutation
 
     @Mock
-    lateinit var repository: DeliveryRepository
+    lateinit var repository: DeliveryMongoDbRepository
 
     @Mock
     lateinit var mapper: DeliveryMapperImpl
@@ -33,11 +30,6 @@ class DeliveryServiceImplTest { // TODO: add test for mutation
 
     @Mock
     lateinit var transactionalOperator: TransactionalOperator
-
-    @BeforeEach
-    fun setup() {
-        ReflectionTestUtils.setField(mapper, "dateMapper", DateMapper())
-    }
 
     @Test
     fun `Test Listing Not Received Items`() {
@@ -65,8 +57,8 @@ class DeliveryServiceImplTest { // TODO: add test for mutation
         val actualResult = deliveryService.getDeliveries(true)
         val expectedResult = sourceValues.map { mapper.convertToDto(it) }
         StepVerifier.create(actualResult)
-            .assertNext { Assertions.assertTrue(expectedResult.contains(it)) }
-            .assertNext { Assertions.assertTrue(expectedResult.contains(it)) }
+            .assertNext { println(it); Assertions.assertTrue(expectedResult.contains(it)) }
+            .assertNext { println(it); Assertions.assertTrue(expectedResult.contains(it)) }
             .verifyComplete()
 
         Mockito.verify(repository, times(1)).findAllByDeliveryStatus(DeliveryStatus.RECEIVED)
