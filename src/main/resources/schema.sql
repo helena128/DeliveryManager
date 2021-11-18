@@ -5,7 +5,7 @@ delivery_id VARCHAR(255) UNIQUE NOT NULL,
 product VARCHAR(255) NOT NULL,
 supplier VARCHAR(255) NOT NULL ,
 quantity INT NOT NULL,
-expected_date TIMESTAMP WITH TIME ZONE,
+expected_date TIMESTAMP(9) WITH TIME ZONE,
 expected_warehouse VARCHAR(255),
-delivery_status VARCHAR(16),
-received_date TIMESTAMP WITH TIME ZONE);
+delivery_status VARCHAR(16) DEFAULT 'PENDING',
+received_date TIMESTAMP(9) WITH TIME ZONE);

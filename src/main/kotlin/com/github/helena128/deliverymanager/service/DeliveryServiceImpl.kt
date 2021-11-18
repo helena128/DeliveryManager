@@ -5,6 +5,7 @@ import com.github.helena128.deliverymanager.model.Delivery
 import com.github.helena128.deliverymanager.model.DeliveryStatus
 import com.github.helena128.deliverymanager.repository.DeliveryRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.reactive.TransactionalOperator
 import reactor.core.publisher.Mono
 
@@ -18,6 +19,7 @@ class DeliveryServiceImpl(
     override fun getDeliveries(received: Boolean) =
         getDeliveryEntities(received).map { deliveryMapper.convertToDto(it) }
 
+    @Transactional
     override fun updateDeliveryStatus(deliveryId: String, newStatus: DeliveryStatus): Mono<Delivery> {
 
         return transactionalOperator.execute { action ->
@@ -29,6 +31,7 @@ class DeliveryServiceImpl(
                 .flatMap { deliveryRepository.save(it) }
                 .doOnNext { println(">> Updated delivery with id $deliveryId, new status ${it.deliveryStatus.name}") }
                 .map { deliveryMapper.convertToDto(it) }
+                .doOnNext { println(">> Updated status ${it.deliveryStatus}") }
         }
             .next()
             .switchIfEmpty(Mono.error(DeliveryNotUpdatedException(deliveryId)))
