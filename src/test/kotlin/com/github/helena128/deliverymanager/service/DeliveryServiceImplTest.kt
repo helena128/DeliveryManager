@@ -1,7 +1,7 @@
 package com.github.helena128.deliverymanager.service
 
 import com.github.helena128.deliverymanager.model.DeliveryStatus
-import com.github.helena128.deliverymanager.repository.DeliveryMongoDbRepository
+import com.github.helena128.deliverymanager.repository.DeliveryRepository
 import com.github.helena128.deliverymanager.util.DataHelper
 import com.nhaarman.mockito_kotlin.times
 import org.junit.jupiter.api.Assertions
@@ -20,7 +20,7 @@ import reactor.test.StepVerifier
 class DeliveryServiceImplTest { // TODO: add test for mutation
 
     @Mock
-    lateinit var repository: DeliveryMongoDbRepository
+    lateinit var repository: DeliveryRepository
 
     @Mock
     lateinit var mapper: DeliveryMapperImpl

@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface DeliveryMongoDbRepository : ReactiveCrudRepository<DeliveryEntity, String> {
+interface DeliveryRepository : ReactiveCrudRepository<DeliveryEntity, String> {
 
     fun findAllByDeliveryStatus(status: DeliveryStatus): Flux<DeliveryEntity>
 

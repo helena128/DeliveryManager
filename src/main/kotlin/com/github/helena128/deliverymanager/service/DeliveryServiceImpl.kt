@@ -3,14 +3,14 @@ package com.github.helena128.deliverymanager.service
 import com.github.helena128.deliverymanager.exception.DeliveryNotUpdatedException
 import com.github.helena128.deliverymanager.model.Delivery
 import com.github.helena128.deliverymanager.model.DeliveryStatus
-import com.github.helena128.deliverymanager.repository.DeliveryMongoDbRepository
+import com.github.helena128.deliverymanager.repository.DeliveryRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.reactive.TransactionalOperator
 import reactor.core.publisher.Mono
 
 @Service
 class DeliveryServiceImpl(
-    val deliveryRepository: DeliveryMongoDbRepository,
+    val deliveryRepository: DeliveryRepository,
     val deliveryMapper: DeliveryMapper,
     val transactionalOperator: TransactionalOperator
 ) : DeliveryService {

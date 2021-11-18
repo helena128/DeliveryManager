@@ -3,7 +3,7 @@ package com.github.helena128.deliverymanager.mutation
 import com.github.helena128.deliverymanager.constants.GRAPHQL_ENDPOINT
 import com.github.helena128.deliverymanager.constants.GRAPHQL_MEDIA_TYPE
 import com.github.helena128.deliverymanager.model.DeliveryStatus
-import com.github.helena128.deliverymanager.repository.DeliveryMongoDbRepository
+import com.github.helena128.deliverymanager.repository.DeliveryRepository
 import com.github.helena128.deliverymanager.util.DataHelper
 import org.hamcrest.core.StringContains.containsString
 import org.junit.jupiter.api.AfterEach
@@ -24,7 +24,7 @@ import reactor.test.StepVerifier
 @AutoConfigureWebTestClient
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryMutationIntegrationTest(@Autowired private val testClient: WebTestClient,
-                                      @Autowired private val repository: DeliveryMongoDbRepository) {
+                                      @Autowired private val repository: DeliveryRepository) {
 
     @BeforeEach
     fun setup() {
