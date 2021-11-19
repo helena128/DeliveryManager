@@ -43,6 +43,7 @@ class DeliveryMutationIntegrationTest(@Autowired private val testClient: WebTest
                     deliveryId
                     deliveryStatus
                     product
+                    updatedDate
               }
             }
         """.trimIndent()
@@ -61,6 +62,7 @@ class DeliveryMutationIntegrationTest(@Autowired private val testClient: WebTest
             .jsonPath("$.data.$query.deliveryStatus").isEqualTo(DeliveryStatus.RECEIVED.name)
             .jsonPath("$.data.$query.product").isEqualTo(pendingEntity.product)
             .jsonPath("$.data.$query.expectedDate").doesNotExist()
+            .jsonPath("$.data.$query.updatedDate").isNotEmpty()
     }
 
     @Test

@@ -13,5 +13,5 @@ data class Delivery(
     val expectedDate: OffsetDateTime,
     val expectedWarehouse: String,
     val deliveryStatus: DeliveryStatus = DeliveryStatus.PENDING,
-    val receivedDate: OffsetDateTime? = null
+    val updatedDate: OffsetDateTime? = null
 )

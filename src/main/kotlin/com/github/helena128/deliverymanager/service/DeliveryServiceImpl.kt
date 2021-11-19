@@ -1,5 +1,6 @@
 package com.github.helena128.deliverymanager.service
 
+import com.github.helena128.deliverymanager.entity.DeliveryEntity
 import com.github.helena128.deliverymanager.exception.DeliveryNotUpdatedException
 import com.github.helena128.deliverymanager.model.Delivery
 import com.github.helena128.deliverymanager.model.DeliveryStatus
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.reactive.TransactionalOperator
 import reactor.core.publisher.Mono
+import java.time.OffsetDateTime
 
 @Service
 class DeliveryServiceImpl(
@@ -27,7 +29,7 @@ class DeliveryServiceImpl(
                 .doOnNext { println(">> Found delivery with id $deliveryId ") }
                 .filter { !newStatus.equals(it.deliveryStatus) }
                 .doOnNext { println(">> Delivery with id $deliveryId has status ${it.deliveryStatus.name}") }
-                .map { it.deliveryStatus = newStatus; it }
+                .map { updateStatus(it, newStatus) }
                 .flatMap { deliveryRepository.save(it) }
                 .doOnNext { println(">> Updated delivery with id $deliveryId, new status ${it.deliveryStatus.name}") }
                 .map { deliveryMapper.convertToDto(it) }
@@ -38,6 +40,14 @@ class DeliveryServiceImpl(
     }
 
     private fun getDeliveryEntities(received: Boolean) =
-        if (received) deliveryRepository.findAllByDeliveryStatus(DeliveryStatus.RECEIVED)
-        else deliveryRepository.findAllByDeliveryStatusNot(DeliveryStatus.RECEIVED)
+        when {
+            received -> deliveryRepository.findAllByDeliveryStatus(DeliveryStatus.RECEIVED)
+            else -> deliveryRepository.findAllByDeliveryStatusNot(DeliveryStatus.RECEIVED)
+        }
+
+    private fun updateStatus(delivery: DeliveryEntity, newStatus: DeliveryStatus): DeliveryEntity {
+        delivery.deliveryStatus = newStatus
+        delivery.updatedDate = OffsetDateTime.now()
+        return delivery
+    }
 }

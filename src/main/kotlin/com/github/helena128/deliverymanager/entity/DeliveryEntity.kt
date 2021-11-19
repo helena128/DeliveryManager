@@ -22,6 +22,6 @@ data class DeliveryEntity(
     val expectedWarehouse: String,
     @Column("delivery_status")
     var deliveryStatus: DeliveryStatus = DeliveryStatus.PENDING,
-    @Column("received_date")
-    var receivedDate: OffsetDateTime? = null
+    @Column("updated_date")
+    var updatedDate: OffsetDateTime? = null
 )

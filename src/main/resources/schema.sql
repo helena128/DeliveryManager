@@ -8,4 +8,4 @@ quantity INT NOT NULL,
 expected_date TIMESTAMP(9) WITH TIME ZONE,
 expected_warehouse VARCHAR(255),
 delivery_status VARCHAR(16) DEFAULT 'PENDING',
-received_date TIMESTAMP(9) WITH TIME ZONE);
+updated_date TIMESTAMP(9) WITH TIME ZONE);
