@@ -34,7 +34,7 @@ To build and run application:
  By default application starts on port `8080`.
  
 #### Application properties
-To pass properties either set env variables or pass following arguments to `java -jar` command:
+To pass properties pass following arguments to `java -jar` command:
 
 | Application property | Description | Example |
 | --- | --- | --- |
@@ -52,7 +52,7 @@ For testing purposes, there is also http://localhost:8080/playground that can be
 ##### Query to retrieve not yet received deliveries
 ```graphql
 query {
-	getDeliveries(received: false) {
+    getDeliveries(received: false) {
         deliveryId
         deliveryStatus
         product
@@ -83,7 +83,7 @@ mutation {
 ##### Exceptions
 If updated entity has already been marked as received or it is non-existent in the system, 
 the response will be similar to this one:
-```graphql
+```json
 {
   "errors": [
     {
