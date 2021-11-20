@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.OffsetDateTime
 
-@Table("delivery")
+@Table("deliveries")
 data class DeliveryEntity(
     @Id
     val id: Long? = null,
