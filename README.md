@@ -62,7 +62,7 @@ query {
 #### Query to retrieve received deliveries
 ```graphql
 query {
-	getDeliveries(received: true) {
+    getDeliveries(received: true) {
         deliveryId
         deliveryStatus
         product
