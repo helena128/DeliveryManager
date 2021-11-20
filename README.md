@@ -27,8 +27,8 @@ To run the application, the following steps are required.
 
 #### Building application
 To build and run application:
- 1. clone project `git clone git@github.com:helena128/PaymentManager.git`
- 2. navigate to the directory of the project `cd PaymentManager/`.
+ 1. clone project `git@github.com:helena128/DeliveryManager.git`
+ 2. navigate to the directory of the project `cd DeliveryManager/`.
  3. run `docker-compose up --build`
  
  By default application starts on port `8080`.
