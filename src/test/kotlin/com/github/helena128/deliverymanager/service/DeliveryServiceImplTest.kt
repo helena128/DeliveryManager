@@ -1,35 +1,36 @@
 package com.github.helena128.deliverymanager.service
 
+import com.github.helena128.deliverymanager.DeliveryManagerApplication
+import com.github.helena128.deliverymanager.entity.DeliveryEntity
+import com.github.helena128.deliverymanager.exception.DeliveryNotUpdatedException
 import com.github.helena128.deliverymanager.model.DeliveryStatus
 import com.github.helena128.deliverymanager.repository.DeliveryRepository
 import com.github.helena128.deliverymanager.util.DataHelper
-import com.nhaarman.mockito_kotlin.times
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.transaction.reactive.TransactionalOperator
+import org.mockito.Mockito.times
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.ActiveProfiles
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 
-@ExtendWith(MockitoExtension::class)
-class DeliveryServiceImplTest { // TODO: add test for mutation
+@SpringBootTest(classes = [DeliveryManagerApplication::class])
+@ActiveProfiles("test")
+class DeliveryServiceImplTest {
 
-    @Mock
+    @MockBean
     lateinit var repository: DeliveryRepository
 
-    @Mock
+    @MockBean
     lateinit var mapper: DeliveryMapperImpl
 
-    @InjectMocks
+    @Autowired
     lateinit var deliveryService: DeliveryServiceImpl
-
-    @Mock
-    lateinit var transactionalOperator: TransactionalOperator
 
     @Test
     fun `Test Listing Not Received Items`() {
@@ -75,6 +76,47 @@ class DeliveryServiceImplTest { // TODO: add test for mutation
             .verifyComplete()
         Mockito.verify(repository, times(0)).findAllByDeliveryStatusNot(DeliveryStatus.RECEIVED)
         Mockito.verify(repository, times(1)).findAllByDeliveryStatus(DeliveryStatus.RECEIVED)
+    }
+
+    @Test
+    fun `Test updating delivery status for pending delivery`() {
+        val testDelivery = DataHelper.findDeliveriesByStatus(DeliveryStatus.PENDING).first().copy(id = 1L)
+        Mockito.`when`(repository.save(any(DeliveryEntity::class.java))).thenReturn(Mono.just(testDelivery))
+        Mockito.`when`(repository.findByDeliveryId(Mockito.anyString())).thenReturn(Mono.just(testDelivery))
+        Mockito.`when`(mapper.convertToDto(any(DeliveryEntity::class.java))).thenCallRealMethod()
+
+        val actualResult = deliveryService.updateDeliveryStatus(testDelivery.deliveryId, DeliveryStatus.RECEIVED)
+        StepVerifier.create(actualResult)
+            .assertNext { delivery ->  {
+                Assertions.assertEquals(testDelivery.deliveryId, delivery.deliveryId);
+                Assertions.assertEquals(testDelivery.product, delivery.product);
+                Assertions.assertNotNull(testDelivery.updatedDate);
+                Assertions.assertEquals(DeliveryStatus.RECEIVED, testDelivery.deliveryStatus);
+            }}
+            .verifyComplete()
+    }
+
+    @Test
+    fun `Test updating delivery status for non-existent delivery`() {
+        val testDeliveryId = "nonExistentDeliveryId"
+        Mockito.`when`(repository.findByDeliveryId(Mockito.anyString())).thenReturn(Mono.empty())
+
+        val actualResult = deliveryService.updateDeliveryStatus(testDeliveryId, DeliveryStatus.RECEIVED)
+        StepVerifier.create(actualResult)
+            .expectError(DeliveryNotUpdatedException::class.java)
+            .verify()
+    }
+
+    @Test
+    fun `Test error on update of delivery status results in exception`() {
+        val testDelivery = DataHelper.findDeliveriesByStatus(DeliveryStatus.PENDING).first().copy(id = 1L)
+        Mockito.`when`(repository.save(any(DeliveryEntity::class.java))).thenReturn(Mono.error(RuntimeException("Some exception happened")))
+        Mockito.`when`(repository.findByDeliveryId(Mockito.anyString())).thenReturn(Mono.just(testDelivery))
+
+        val actualResult = deliveryService.updateDeliveryStatus(testDelivery.deliveryId, DeliveryStatus.RECEIVED)
+        StepVerifier.create(actualResult)
+            .expectError(RuntimeException::class.java)
+            .verify()
     }
 
 }
