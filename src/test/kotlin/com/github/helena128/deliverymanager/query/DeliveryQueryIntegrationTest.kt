@@ -1,4 +1,4 @@
-package com.github.helena128.deliverymanager.queries
+package com.github.helena128.deliverymanager.query
 
 import com.github.helena128.deliverymanager.constants.GRAPHQL_ENDPOINT
 import com.github.helena128.deliverymanager.constants.GRAPHQL_MEDIA_TYPE

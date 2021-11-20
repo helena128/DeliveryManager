@@ -1,0 +1,4 @@
+spring.application.name: delivery-manager
+
+delivery-manager:
+  input-data-path: deliveries.json

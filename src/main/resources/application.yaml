@@ -5,4 +5,4 @@ graphql:
     - "com.github.helena128.deliverymanager.model"
 
 delivery-manager:
-  input-data-path: deliveries.json
+  input-data-path: ../data/deliveries.json
